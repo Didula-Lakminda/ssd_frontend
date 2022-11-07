@@ -2,14 +2,23 @@ import './assets/libs/boxicons-2.1.1/css/boxicons.min.css'
 import './scss/App.scss'
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import MainLayout from './layout/MainLayout';
-import Blank from './pages/Blank';
+import Manager from './pages/Manager';
+import Worker from './pages/Worker';
+import Login from './pages/Login';
 
 function App() {
   return (
     <BrowserRouter>
             <Routes>
-                <Route path="/" element={<MainLayout />}>
-                    <Route path="orders" element={<Blank />} />
+                <Route exact path='/' element={<Login />} />
+                <Route path="/home" element={<MainLayout />}>
+                {localStorage.getItem('userRole') === 'manager' ? (
+                        <Route index element={<Manager />} />
+                    ) : ( localStorage.getItem('userRole') === 'worker' ? (
+                        <Route index element={<Worker />} />
+                    ) : (
+                        <Route index element={<Login />} />
+                    ))}
                 </Route>
             </Routes>
         </BrowserRouter>

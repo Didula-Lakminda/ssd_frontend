@@ -32,18 +32,35 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="sidebar__menu">
-                {
-                    sidebarNav.map((nav, index) => (
-                        <Link to={nav.link} key={`nav-${index}`} className={`sidebar__menu__item ${activeIndex === index && 'active'}`} onClick={closeSidebar}>
+                {localStorage.getItem('userRole') === 'manager' ? (
+                    <>
+                        <div className={`sidebar__menu__item ${activeIndex === 1 && 'active'}`} onClick={closeSidebar}>
                             <div className="sidebar__menu__item__icon">
-                                {nav.icon}
+                                <i className='bx bx-home-alt'></i>
                             </div>
                             <div className="sidebar__menu__item__txt">
-                                {nav.text}
+                                Message & File Upload
                             </div>
-                        </Link>
-                    ))
-                }
+                        </div>
+                    </>
+                ) : (
+                    localStorage.getItem('userRole') === 'worker' ? (
+                        <>
+                        <div className={`sidebar__menu__item ${activeIndex === 1 && 'active'}`} onClick={closeSidebar}>
+                            <div className="sidebar__menu__item__icon">
+                                <i className='bx bx-home-alt'></i>
+                            </div>
+                            <div className="sidebar__menu__item__txt">
+                                Send Message
+                            </div>
+                        </div>
+                    </>
+                    ) : (
+                        <>
+                            <h1>Invalid User</h1>
+                        </>
+                    )
+                )}
                 <div className="sidebar__menu__item">
                     <div className="sidebar__menu__item__icon">
                         <i className='bx bx-log-out'></i>
