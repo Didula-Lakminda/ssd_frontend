@@ -1,20 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from 'axios';
 
 const Login = () => {
 
     const navigate = useNavigate();
 
     //state for email and password
-    const [Username, setUsername] = React.useState("");
-    const [password, setPassword] = React.useState("");
-    
-    const goToHome = () => {
-        navigate('/home');
-
-        //save user role in local storage
-        localStorage.setItem('userRole', 'manager');
-    }
+    const [Username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
 
     //on change event for email and password
     const onChangeUsername = (e) => {
@@ -24,6 +18,25 @@ const Login = () => {
         setPassword(e.target.value);
     }
 
+    const onSubmitLogin = async () => {
+
+        let user = {
+            username: Username,
+            password: password
+        }
+
+        await axios.post('/login-user', user)
+            .then(res => {
+                navigate('/home');
+                localStorage.setItem('token', res.data.token);
+                localStorage.setItem('userRole', res.data.role);
+                window.location.reload();
+            })
+            .catch(err => {
+                alert("Invalid username or password");
+            })
+    }
+        
     return (
         <section className="Form my-4 mx-5">
             <div className="container" style={{ marginTop: "100px" }}>
@@ -49,7 +62,7 @@ const Login = () => {
                             </div>
                             <div className="form-row my-5">
                                 <div className="col-lg-7">
-                                    <button type="button" className="btn1" onClick={goToHome}
+                                    <button type="button" className="btn1" onClick={onSubmitLogin}
                                     style={{ border: "none", outline: "none", height: "50px", width: "100%",
                                     backgroundColor: "black", color: "white", borderRadius: "4px", fontWeight: "bold"  }}>Login</button>
                                 </div>

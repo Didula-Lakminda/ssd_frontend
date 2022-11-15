@@ -1,6 +1,26 @@
-import React from 'react'
+import React, { useState } from 'react';
+import axios from 'axios';
 
 const Worker = () => {
+
+    const [message, setMessage] = useState("");
+
+    const onSubmitSendMessage = async () => {
+
+        let textmessage = {
+            message: message
+        }
+
+        await axios.post('/create-message', textmessage)
+            .then(res => {
+                alert("Message sent successfully");
+            })
+            .catch(err => {
+                alert("Message sending failed");
+            })
+    }
+
+
     return (
         <section className="Form my-4 mx-5">
             <div className="container" style={{ marginTop: "100px" }}>
@@ -11,14 +31,17 @@ const Worker = () => {
                         <form>
                             <div className="form-row">
                                 <div className="col-lg-10">
-                                    <input type="text" placeholder="Username" className="form-control my-3 p-3" />
+                                    <input type="text" placeholder="Username" className="form-control my-3 p-3"
+                                        onChange={(e) => setMessage(e.target.value)} value={message}
+                                    />
                                 </div>
                             </div>
                             <div className="form-row my-5">
                                 <div className="col-lg-10">
                                     <button type="button" className="btn1"
-                                    style={{ border: "none", outline: "none", height: "50px", width: "100%",
-                                    backgroundColor: "black", color: "white", borderRadius: "4px", fontWeight: "bold"  }}>Send Message</button>
+                                        onClick={onSubmitSendMessage}
+                                        style={{ border: "none", outline: "none", height: "50px", width: "100%",
+                                        backgroundColor: "black", color: "white", borderRadius: "4px", fontWeight: "bold"  }}>Send Message</button>
                                 </div>
                             </div>
                         </form>

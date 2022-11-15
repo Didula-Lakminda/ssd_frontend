@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import './sidebar.scss'
-import { Link, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { images } from '../../constants'
 import sidebarNav from '../../configs/sidebarNav'
 
 const Sidebar = () => {
     const [activeIndex, setActiveIndex] = useState(0)
     const location = useLocation()
+    const navigate = useNavigate()
 
     useEffect(() => {
         const curPath = window.location.pathname.split('/')[1]
@@ -23,6 +24,13 @@ const Sidebar = () => {
         }, 500);
     }
 
+    const onSubmitLogOut = () => {
+        navigate('/');
+        localStorage.removeItem('token');
+        localStorage.removeItem('userRole');
+        window.location.reload();
+    }
+
     return (
         <div className='sidebar'>
             <div className="sidebar__logo">
@@ -32,14 +40,26 @@ const Sidebar = () => {
                 </div>
             </div>
             <div className="sidebar__menu">
-                {localStorage.getItem('userRole') === 'manager' ? (
+                {localStorage.getItem('userRole') === 'admin' ? (
+                    <>
+                    <div className={`sidebar__menu__item ${activeIndex === 1 && 'active'}`} onClick={closeSidebar}>
+                        <div className="sidebar__menu__item__icon">
+                            <i className='bx bx-home-alt'></i>
+                        </div>
+                        <div className="sidebar__menu__item__txt">
+                            Add Users
+                        </div>
+                    </div>
+                </>
+                ) : (
+                localStorage.getItem('userRole') === 'manager' ? (
                     <>
                         <div className={`sidebar__menu__item ${activeIndex === 1 && 'active'}`} onClick={closeSidebar}>
                             <div className="sidebar__menu__item__icon">
                                 <i className='bx bx-home-alt'></i>
                             </div>
                             <div className="sidebar__menu__item__txt">
-                                Message & File Upload
+                                Save File and Message
                             </div>
                         </div>
                     </>
@@ -51,7 +71,7 @@ const Sidebar = () => {
                                 <i className='bx bx-home-alt'></i>
                             </div>
                             <div className="sidebar__menu__item__txt">
-                                Send Message
+                                Save Message
                             </div>
                         </div>
                     </>
@@ -60,12 +80,12 @@ const Sidebar = () => {
                             <h1>Invalid User</h1>
                         </>
                     )
-                )}
+                ))}
                 <div className="sidebar__menu__item">
                     <div className="sidebar__menu__item__icon">
                         <i className='bx bx-log-out'></i>
                     </div>
-                    <div className="sidebar__menu__item__txt">
+                    <div className="sidebar__menu__item__txt" onClick={onSubmitLogOut}>
                         Logout
                     </div>
                 </div>
