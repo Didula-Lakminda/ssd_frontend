@@ -23,7 +23,7 @@ const Manager = () => {
         else if ((message === "" && file !== null) || (message !== "" && file !== null)) {
             let formData = new FormData();
             formData.append('image', file);
-            formData.append('message', JSON.stringify(message));
+            formData.append('message', message);
             console.log(formData);
             await axios.post('/file-message-upload', formData)
                 .then(res => {
